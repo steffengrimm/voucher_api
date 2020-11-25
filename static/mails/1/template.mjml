@@ -1,0 +1,139 @@
+<mjml>
+  <mj-head>
+  <mj-font name="EB Garamond" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@700&display=swap" />
+  <mj-font name="OpenSans" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" />
+    <mj-attributes>
+      <mj-text color="#04386e" font-family="OpenSans, sans-serif" font-size="16px"></mj-text>
+      <mj-class name="highlight" background-color="#04386e" color="#ffffff"></mj-class>
+      <mj-class name="highlight-50" background-color="#336199" color="#ffffff"></mj-class>
+			<mj-class name="greyText" color="#817f7e"></mj-class>
+      <mj-divider border-width="1px" border-color="#04386e" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body>
+    <mj-section padding-bottom="0">
+      <mj-column mj-class="highlight">
+        <mj-image width="100px" src="{{asset}}logo.png"></mj-image>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0">
+      <mj-column background-color="#04386e">
+        <mj-image src="{{asset}}header.jpg" padding="0"></mj-image>
+      </mj-column>
+    </mj-section>
+    
+      <mj-section padding="10px" background-color="#ffffff">
+      	<mj-column>
+          <mj-text padding="25px" font-size="36px" mj-class="highlightText" text-transform="uppercase" font-family="EB Garamond, OpenSans">Bestellbe&shy;stätigung</mj-text>
+            <mj-text font-weight="bold">Ihre Bestellung Nr. {{order.number}} / {{order.orderingTime}}</mj-text>
+        	<mj-text>{{customer.prefix}} {{customer.lastName}}</mj-text>
+        	<mj-text>vielen Dank für Ihre Bestellung. Mit dieser E-Mail erhalten Sie nochmals alle Informationen zu Ihrer Bestellung in einer Übersicht sowie unsere <a href="" style="text-decoration:none; font-weight: bold; color: inherit">AGB</a> und eine <a href="" style="text-decoration:none; font-weight: bold; color: inherit">Widerrufsbelehrung</a></mj-text>
+          <mj-text font-weight="bold">Mit freundlichen Grüßen,<br/>Ihr Hofbräuhaus Team</mj-text>
+      	</mj-column>
+      </mj-section>
+    	<mj-wrapper padding="10px 0" background-color="#f2f5f9">
+      <mj-section text-align="left" padding="10px 25px">
+        <mj-column inner-border-left="5px solid #d5b05e" padding-left="10px">
+            <mj-text padding="5px 15px"><b>Zahlart</b><br/>Kreditkarte</mj-text>
+        </mj-column>
+        <mj-column>
+					<mj-text></mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section text-align="left" padding="10px 25px">
+        <mj-column inner-border-left="5px solid #d5b05e" padding-left="10px">
+          <mj-text padding="5px 15px"><b>Versandart</b><br/>print@home</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section text-align="left" padding="10px 25px">
+        <mj-column inner-border-left="5px solid #d5b05e" padding-left="10px">
+          <mj-text padding="5px 15px">
+            <b>Rechnungsadresse</b><br/>
+            {{customer.firstName}} {{customer.lastName}}<br/>
+            {{billingAddress.street}} {{billingAddress.housenumber}}<br/>
+            {{billingAddress.zip}} {{billingAddress.city}}<br/>
+          </mj-text>
+        </mj-column>
+      </mj-section>
+          </mj-wrapper>
+    <mj-wrapper padding="10px" background-color="#ffffff">
+    <mj-section>
+      <mj-column width="100%">
+        <mj-text text-transform="uppercase" padding-bottom="0"><b>Bestellübersicht</b></mj-text>
+      </mj-column>
+      </mj-section>
+      <mj-section padding-bottom="10px">
+        <mj-column width="100%">
+        <mj-text><b>Gutscheine</b></mj-text>
+				<mj-divider></mj-divider>
+      </mj-column>
+      </mj-section>
+      {{#each voucherGroups}}
+      <mj-section padding="0">
+      <mj-column width="30%">
+        <mj-text mj-class="greyText" align="center">Einzelpreis</mj-text>
+        <mj-text align="center">{{this.initialValue}}</mj-text>
+      </mj-column>
+      <mj-column width="30%">
+        <mj-text mj-class="greyText" align="center">Menge</mj-text>
+        <mj-text align="center">{{this.quantity}}</mj-text>
+      </mj-column>
+      <mj-column width="30%">
+        <mj-text mj-class="greyText" align="center">Summe</mj-text>
+        <mj-text align="center"><b>{{this.sum}}</b></mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0">
+      <mj-column width="100%">
+        <mj-divider></mj-divider>
+      </mj-column>
+    </mj-section>
+    {{/each}}
+      <mj-section padding-top="0">
+        <mj-column width="30%"></mj-column>
+        <mj-column width="30%"></mj-column>
+        <mj-column width="30%">
+          <mj-text mj-class="greyText" align="center">Gesamtsumme<!--<br/>(inkl. MwSt.)--></mj-text>
+          <mj-text align="center"><b>{{totalSum}}</b></mj-text>
+        </mj-column>
+      </mj-section>
+		</mj-wrapper>
+    <mj-wrapper padding="10px 0" background-color="#f2f5f9">
+      <mj-section>
+        <mj-column padding-left="10px">
+          <mj-text>Die von Ihnen bestellten Gutscheine finden Sie als PDF-Datei im Anhang an diese Mail.</mj-text>
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+    <mj-section padding="0">
+      <mj-column mj-class="highlight" padding="20px 10px">
+        <mj-text mj-class="highlight" line-height="24px">
+          Hofbräuhaus München<br/>
+          Platzl 9 | 80331 München<br/>
+          Tel.: +49 (0) 89 / 290 136 - 100<br/>
+          Fax: +49 (0) 89 / 290 136 - 129<br/>
+          hbteam@hofbraeuhaus.de  |  hofbraeuhaus.de
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0">
+      <mj-column mj-class="highlight-50" padding="20px 10px">
+        <mj-text mj-class="highlight" padding-top="8px" padding-bottom="8px" line-height="20px">Sperger Gaststättenbetrieb OHG wird vertreten durch: Wirte und Geschäftsführer: Wolfgang Sperger, Michael Sperger</mj-text>
+        <mj-text mj-class="highlight" padding-top="8px" padding-bottom="8px" line-height="20px">Registergericht: München<br/>Handelsregister<br/>
+Registernummer: HRA 84302<br/>
+        </mj-text>
+        <mj-text mj-class="highlight" padding-top="8px" padding-bottom="8px" line-height="20px">Zuständige Aufsichtsbehörde: Landeshauptstadt München,<br/>
+Ruppertstr. 19, 80466 München</mj-text>
+        <mj-text mj-class="highlight" padding-top="8px" padding-bottom="8px" line-height="20px">Umsatzsteuer-Identifikationsnummer gemäß § 27a<br/>
+Umsatzsteuergesetz (UStG): DE814136146</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0">
+      <mj-column mj-class="highlight" padding-top="10px" padding-bottom="10px">
+        <mj-text mj-class="highlight" line-height="24px" align="center">
+          Impressum | Datenschutz
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

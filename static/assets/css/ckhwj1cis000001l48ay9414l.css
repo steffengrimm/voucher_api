@@ -1,0 +1,201 @@
+:root {
+  --background: #ebe5e1;
+}
+
+button, .aButton {
+  background-color: transparent;
+  color: #9c7e68;
+  border-radius: 2px;
+  border: 1px solid currentColor;
+}
+button.active, .aButton.active {
+  background-color: #7b5336;
+  color: #fff;
+  border: none;
+}
+
+hr {
+  border-top-color: #cabaaf;
+}
+
+app-main {
+  color: #9c7e68;
+  background-color: #ebe5e1;
+}
+
+app-top-bar, app-footer {
+  background-color: #ded4cd;
+  color: #ce5763;
+}
+
+app-top-bar {
+  --stroke: #bda99b;
+  --fill: #44cbc7;
+}
+app-top-bar .bullets {
+  color: inherit;
+}
+app-top-bar .contact {
+  background-color: #fff;
+  --stroke: #9c7e68;
+}
+
+app-layout:before, app-layout:after {
+  background: linear-gradient(#abaaa9 -5px, transparent 100%);
+}
+app-layout .bullets .active {
+  background-color: #7b5336;
+  color: #fff;
+}
+
+app-value .presetValues > * {
+  background-color: #9c7e68;
+  color: #fff;
+}
+app-value .presetValues > *.active {
+  background-color: #44cbc7;
+}
+app-value .totalPrice {
+  background-color: #9c7e68;
+  color: #eee;
+}
+
+app-quantity {
+  border: 1px solid #44cbc7;
+  background-color: #44cbc7;
+  color: #b4eae9;
+}
+app-quantity .square > div {
+  background-color: #44cbc7;
+}
+app-quantity .square > div.value {
+  background-color: transparent;
+  color: #fff;
+}
+
+app-login .required-info {
+  background-color: #ce5763;
+  color: #fff;
+}
+app-login .title-selection > label, app-login .invoice-wanted > label {
+  color: #7b5336;
+}
+app-login .email-status button {
+  background-color: #9c7e68;
+  --stroke: #9c7e68;
+  --fill: #ebe5e1;
+  color: #fff;
+  border: none;
+}
+app-login .email-status button:disabled {
+  background-color: #7b5336;
+  --fill: #44cbc7;
+  --stroke: #fff;
+  color: #ffffff;
+}
+app-login .labeled-radioBox:checked + span {
+  background-color: #7b5336;
+  border-color: #7b5336 !important;
+  color: #fff !important;
+}
+app-login app-decorated-input {
+  color: #7b5336;
+}
+
+app-decorated-input.ng-invalid.ng-dirty, app-decorated-input.required.ng-invalid.ng-touched {
+  color: #ce5763;
+}
+app-decorated-input .frame {
+  background-color: #ebe5e1;
+  border: 1px solid #7b5336;
+  border-radius: 2px;
+}
+app-decorated-input .frame .label {
+  color: inherit;
+}
+app-decorated-input:not(.no-marker) .frame::before {
+  background-color: #cabaaf;
+}
+app-decorated-input.required .frame::before {
+  background-color: #ce5763;
+}
+app-decorated-input.required.focused.ng-valid .frame::before {
+  background-color: #44cbc7;
+}
+app-decorated-input input.focused ~ .label, app-decorated-input input:focus ~ .label {
+  color: inherit;
+}
+
+app-regular-overlay {
+  background-color: rgba(176, 152, 134, 0.95);
+  color: #fff;
+}
+
+app-custom-value .numberBlock {
+  color: #ebe5e1;
+}
+app-custom-value .numberBlock > div.full {
+  background-color: #7b5336;
+  color: #ebe5e1;
+}
+app-custom-value input {
+  background-color: #44cbc7;
+  color: #fff;
+}
+app-custom-value button {
+  background-color: #7b5336;
+  color: #fff;
+}
+app-custom-value hr {
+  border-top-color: #ebe5e1;
+}
+
+app-payment {
+  color: #7b5336;
+}
+app-payment input {
+  background-color: transparent;
+  border: 1px solid #7b5336;
+}
+app-payment .cc-field {
+  border: 1px solid currentColor;
+}
+app-payment app-radio-button .inner {
+  color: #cabaaf;
+  border-color: #b09886;
+}
+app-payment app-radio-button input:checked ~ .inner {
+  color: #8fe0dd;
+  border-color: #44cbc7;
+}
+
+app-cart .mwst, app-payment .mwst {
+  background-color: #9c7e68;
+  color: #fff;
+}
+app-cart .infoBox, app-payment .infoBox {
+  border-radius: 2px;
+  border: 1px solid #b09886;
+}
+app-cart .infoBox.contrast, app-payment .infoBox.contrast {
+  border-color: #44cbc7;
+}
+app-cart .infoBox.contrast.full, app-payment .infoBox.contrast.full {
+  background-color: #44cbc7;
+  color: #fff;
+}
+
+app-contact .footer {
+  border-top: 1px solid #cabaaf;
+}
+
+app-result {
+  color: #7b5336;
+  background-color: #ebe5e1;
+}
+app-result .article {
+  border-bottom: 4px solid #7b5336;
+}
+app-result .aButton.active {
+  background-color: #44cbc7;
+}

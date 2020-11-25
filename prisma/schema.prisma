@@ -1,0 +1,222 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Address {
+  id Int @id @default(autoincrement())
+  street String
+  nr  String
+  zip String
+  city  String
+  website String
+  locationMail  String
+  locationPhone String
+  locationPhone2  String?
+  company String
+  partner String
+  ustid String
+  partnerPhone  String
+  partnerMail String
+}
+
+model Customer {
+  id Int @id @default(autoincrement())
+  email String
+  firstName String
+  lastName String
+  prefix CustomerTitle?
+  title String?
+  phone String?
+  invoiceData String?
+  location Location @relation(fields: [locationId], references: [id])
+  locationId Int
+  orders Order[]
+
+  @@unique([email, locationId])
+}
+
+enum CustomerTitle {
+  MR
+  MS
+}
+
+model Layout {
+  id String @id @default(cuid())
+  name String
+  description String?
+  location Location @relation(fields: [locationId], references: [id])
+  locationId Int
+  positioning String
+  blocked Boolean @default(false)
+  vouchers Voucher[]
+  tempVoucher VoucherTemp[]
+}
+
+model Location {
+  id Int @id @default(autoincrement())
+  kundenNummer Int @unique
+  name String
+  users User[] @relation(references: [id])
+  address Address @relation(fields: [addressId], references: [id])
+  addressId Int
+  widgets Widget[]
+  settings LocationSetting[]
+  customers Customer[]
+  layouts Layout[]
+}
+
+model LocationSetting {
+  location Location @relation(fields: [locationId], references: [id])
+  locationId Int
+  settingType LocationSettingType
+  value String
+
+  @@unique([locationId,settingType])
+}
+
+enum LocationSettingType {
+  MAILSERVER
+  PAYMENTMETHODS
+  PAYMENTKEYS
+  PRESETVALUES
+  VALUEBOUNDARIES
+  PARTIALREDEMPTION
+  SOCIALMEDIA
+}
+
+model Message {
+  id Int @id @default(autoincrement())
+  location Location @relation(fields: [locationId], references: [id])
+  locationId Int
+  messageType MessageType
+  language String?
+  text String
+  textType TextType
+  belongsToWidget Widget? @relation("B")
+}
+
+enum MessageType {
+  AGB
+  DISCLAIMER
+  PRIVACY
+  DECLINETEXT
+  WIDGETHEADER
+  BLOCKEDINFO
+}
+
+enum TextType {
+  STRING
+  URL
+  PDF
+}
+
+model Order {
+  id String @id @default(cuid())
+  number String?
+  customer Customer? @relation(fields: [customerId], references: [id])
+  customerId Int?
+  lastAction DateTime @updatedAt
+  widget Widget @relation(fields: [widgetId], references: [id])
+  widgetId String
+  orderingTime DateTime?
+  vouchers Voucher[]
+  tempVouchers VoucherTemp[]
+  shippingAddress String?
+  state OrderState
+  payment Payment?
+}
+
+enum OrderState {
+  INCOMPLETE
+  COMPLETED
+  DELETED
+}
+
+model Payment {
+  id Int @id @default(autoincrement())
+  order Order @relation(fields: [orderId], references: [id])
+  orderId String @unique
+  paymentType PaymentMethod
+  token String?
+  totalPrice Int @default(0)
+}
+
+enum PaymentMethod {
+    CASH
+    CREDITCARD
+    MOBILEPAYMENT
+    PAYPAL
+    ELECTRONICCASH
+}
+
+model User {
+  id String @id @default(cuid())
+  username String @unique
+  hash String
+  salt String
+  locations Location[] @relation(references: [id])
+}
+
+model Voucher {
+  id String @id @default(cuid())
+  number String
+  order Order @relation(fields: [orderId], references: [id])
+  orderId String
+  layout Layout @relation(fields: [layoutId], references: [id])
+  layoutId String
+  activities VoucherActivity[]
+  initialValue Int
+  voucherState VoucherState?
+  annotations String?
+}
+
+model VoucherActivity {
+  id Int @id @default(autoincrement())
+  voucher Voucher @relation(fields: [voucherId], references: [id])
+  voucherId String
+  valueChange Int
+  timeOfChange DateTime
+  user User @relation(fields: [triggeredBy], references: [id])
+  triggeredBy String
+}
+
+enum VoucherState {
+  PRISTINE
+  BROACHED
+  REDEEMED
+  REFUNDED
+  DELETED
+}
+
+model VoucherTemp {
+  id String @id @default(cuid())
+  order Order @relation(fields: [orderId], references: [id])
+  orderId String
+  layout Layout @relation(fields: [layoutId], references: [id])
+  layoutId String
+  initialValue Int
+  quantity Int
+  annotations String?
+}
+
+model Widget {
+  id String @id @default(cuid())
+  location Location @relation(fields: [locationId], references: [id])
+  locationId Int
+  identifier String @unique()
+  infoText Message? @relation("A",fields: [infoTextId], references: [id])
+  infoTextId Int?
+  hidden Boolean @default(false)
+  blocked Boolean @default(false)
+  blockedInfo Message? @relation("B",fields: [blockedInfoId], references: [id])
+  blockedInfoId Int?
+  hasCustomCSS Boolean @default(false)
+}
