@@ -4,11 +4,12 @@ import { Color, CustomFontEmbedder, PDFDict, PDFDocument, PDFFont, PDFName, PDFR
 import { FontNames } from '@pdf-lib/standard-fonts';
 import * as fontkit from '@pdf-lib/fontkit'
 import { QRCode } from './qr-generator';
-import { fromBuffer } from "pdf2pic";
+//import { fromBuffer } from "pdf2pic";
 import { PrismaService } from './prisma.service';
 import { join } from 'path';
 import { numberAsWord } from './number-as-word';
 import { LayoutFormat, TextFormat } from './layout-format';
+import { safeJSONParse } from './safe-json';
 
 const rootDirectory = join(__dirname, '..', '..', 'static');
 const layoutDirectory = join(rootDirectory, 'layouts');
@@ -73,6 +74,7 @@ const defaultConfig : LayoutFormat = {
     position: [469.692,634.647],
     size: 80.736,
     color: '#153d8a',
+    background: '#fff',
     padding: 0,
   }
 }
@@ -99,19 +101,27 @@ export class PDFService {
   }
 
   private async makeConfiguration(input: string) : Promise<LayoutFormat> {
+    const obj = safeJSONParse(input);
+    const keys = Object.keys(obj);
     try {
-      let obj : {} = JSON.parse(input);
-      if(Object.keys(obj)) {
-        const config = obj as LayoutFormat;
-        const usedFonts = Object.keys(config.text).map(type => (<TextFormat>config.text[type]).font);
+      if(keys.length) {
+        const newConfig = obj as LayoutFormat;
+        const usedFonts = Object.keys(newConfig.text).map(type => (<TextFormat>newConfig.text[type]).font);
         if(usedFonts.includes('OPENSANS'))
           this._fontStorage.set('OPENSANS', this._openSans);
         if(usedFonts.includes('OPENSANSBOLD'))
           this._fontStorage.set('OPENSANSBOLD', this._openSansBold);
 
-        if(config.fonts) {
-          await Promise.all(Object.keys(config.fonts).map(async descriptor => {
-            const url = config.fonts[descriptor];
+        const patchedConfig = defaultConfig;
+
+        for(let key in newConfig.text) {
+          patchedConfig.text[key] = {...patchedConfig.text[key], ...newConfig.text[key]}
+        }
+        patchedConfig.code = {...patchedConfig.code, ...newConfig.code};
+
+        if(newConfig.fonts) {
+          await Promise.all(Object.keys(newConfig.fonts).map(async descriptor => {
+            const url = newConfig.fonts[descriptor];
             if(url) {
               return fetch(url).then(response => {
                 this._fontStorage.set(descriptor, response.arrayBuffer());
@@ -120,13 +130,14 @@ export class PDFService {
             }
           }));
         }
-        return Promise.resolve(config);
+        return patchedConfig;
       }
     } catch(e) {
     } finally {
       this._fontStorage.set('OPENSANS', this._openSans);
       this._fontStorage.set('OPENSANSBOLD', this._openSansBold);
-      return Promise.resolve(defaultConfig);
+
+      return defaultConfig;
     }
   }
 
@@ -308,7 +319,7 @@ export class PDFService {
         x: posX,
         y: posY,
         size: qrSize,
-        color: rgb(1,1,1),
+        color: PDFService.parseColor(codeConfig.background),
       })
   
       const qrColor = PDFService.parseColor(codeConfig.color);
@@ -337,7 +348,7 @@ export class PDFService {
     return Buffer.from((await pdfDoc.save()).buffer);
   }
 
-  public async createPDFPreview(widgetId: string, layoutId: string) {
+  /*public async createPDFPreview(widgetId: string, layoutId: string) {
     const layoutBytes = await this.openLayoutFile(layoutId);
 
     const firstPage = (await PDFDocument.load(layoutBytes)).getPage(0);
@@ -355,7 +366,7 @@ export class PDFService {
 
     const storeAsImg = fromBuffer(layoutBytes);
     return await storeAsImg(1);
-  }
+  }*/
 }
 /*
     

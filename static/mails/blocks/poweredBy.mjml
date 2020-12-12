@@ -1,0 +1,5 @@
+<mj-section>
+    <mj-column>
+        <mj-image src="{{base}}poweredBy.png" width="170px">
+    </mj-column>
+</mj-section>

@@ -1,0 +1,188 @@
+:root {
+  --background: #fff;
+}
+
+button, .aButton {
+  background-color: #b3c4d9;
+  color: #6689b3;
+  border-radius: 2px;
+  border: none;
+}
+button.active, .aButton.active {
+  background-color: #d5b05e;
+  color: #fff;
+}
+
+hr {
+  border-top-color: #99b0cc;
+}
+
+app-main {
+  color: #666666;
+  background-color: #fff;
+}
+
+app-top-bar, app-footer {
+  background-color: #003a80;
+  color: #fff;
+}
+
+app-top-bar {
+  --stroke: #fff;
+  --fill: #d5b05e;
+}
+app-top-bar .bullets {
+  color: #fff;
+}
+app-top-bar .contact {
+  background-color: #d5b05e;
+}
+
+app-layout:before, app-layout:after {
+  background: linear-gradient(#abaaa9 -5px, transparent 100%);
+}
+app-layout .bullets .active {
+  background-color: #003a80;
+  color: #fff;
+}
+
+app-value .presetValues > * {
+  background-color: #003a80;
+  color: #fff;
+}
+app-value .presetValues > *.active {
+  background-color: #d5b05e;
+}
+app-value .totalPrice {
+  background-color: #003a80;
+  color: #eee;
+}
+
+app-quantity {
+  border: 1px solid #d5b05e;
+  background-color: transparent;
+  color: #fff;
+}
+app-quantity .square > div {
+  background-color: #d5b05e;
+}
+app-quantity .square > div.value {
+  background-color: transparent;
+  color: #003a80;
+}
+
+app-login .required-info {
+  background-color: #e2001a;
+  color: #fff;
+}
+app-login .title-selection > label, app-login .invoice-wanted > label {
+  color: #003a80;
+}
+app-login .email-status button {
+  background-color: #003a80;
+  color: #fff;
+}
+app-login .email-status button:disabled {
+  background-color: #99b0cc;
+  color: #ffffff;
+}
+app-login .labeled-radioBox:checked + span {
+  background-color: #003a80;
+  border-color: #003a80 !important;
+  color: #fff !important;
+}
+app-login app-decorated-input {
+  color: #003a80;
+}
+
+app-decorated-input.ng-invalid.ng-dirty, app-decorated-input.required.ng-invalid.ng-touched {
+  color: #e2001a;
+}
+app-decorated-input .frame {
+  background-color: #fff;
+  border: 1px solid #003a80;
+  border-radius: 2px;
+}
+app-decorated-input .frame .label {
+  color: inherit;
+}
+app-decorated-input:not(.no-marker) .frame::before {
+  background-color: #99b0cc;
+}
+app-decorated-input.required .frame::before {
+  background-color: #e2001a;
+}
+app-decorated-input.required.focused.ng-valid .frame::before {
+  background-color: #003a80;
+}
+app-decorated-input input.focused ~ .label, app-decorated-input input:focus ~ .label {
+  color: inherit;
+}
+
+app-regular-overlay {
+  background-color: rgba(0, 58, 128, 0.95);
+  color: #fff;
+}
+
+app-custom-value .numberBlock {
+  color: #b3c4d9;
+}
+app-custom-value .numberBlock > div.full {
+  background-color: #b3c4d9;
+  color: #003a80;
+}
+app-custom-value input {
+  color: #003a80;
+}
+app-custom-value button {
+  background-color: #d5b05e;
+}
+
+app-payment {
+  color: #003a80;
+}
+app-payment app-radio-button .inner {
+  color: #99b0cc;
+  border-color: #6689b3;
+}
+app-payment app-radio-button input:checked ~ .inner {
+  color: #e6d09e;
+  border-color: #d5b05e;
+}
+app-payment .cc-field {
+  border: 1px solid currentColor;
+}
+
+app-cart .mwst, app-payment .mwst {
+  background-color: #6689b3;
+  color: #fff;
+}
+app-cart .infoBox, app-payment .infoBox {
+  border-radius: 2px;
+  border: 1px solid #6689b3;
+}
+app-cart .infoBox.contrast, app-payment .infoBox.contrast {
+  border-color: #d5b05e;
+}
+app-cart .infoBox.contrast.full, app-payment .infoBox.contrast.full {
+  background-color: #d5b05e;
+  color: #fff;
+}
+app-cart app-quantity .square > div.value, app-payment app-quantity .square > div.value {
+  background-color: #fff;
+}
+
+app-contact .footer {
+  border-top: 1px solid #99b0cc;
+}
+
+app-result {
+  color: #003a80;
+  background-color: #fff;
+}
+app-result .article {
+  border-bottom: 4px solid #003a80;
+}
+app-result .thanks {
+  color: #d5b05e;
+}

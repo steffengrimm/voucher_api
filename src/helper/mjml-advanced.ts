@@ -54,7 +54,9 @@ export class MJMLAdvanced {
         return (data: any) => {
             let result = mjml2html(this.rootFile, {
                 preprocessors: [
-                    (xml) => this.hb.compile(xml)(data)
+                    (xml) => {
+                        return this.hb.compile(xml,{noEscape: true})(data)
+                    }
                 ],
                 ignoreIncludes: true,
                 minify: true

@@ -15,19 +15,20 @@ export type LayoutFormat = {
 }
 
 export type TextFormat = {
-    position: [number,number],
-    size: number,
-    font : string
-    color: string,
+    position?: [number,number],
+    size?: number,
+    font? : string
+    color?: string,
     anchorX?: 'left' | 'center' | 'right',
     anchorY?: 'top' | 'middle' | 'bottom'
 }
 
 export type CodeFormat = {
-    position: [number,number],
-    size: number,
+    position?: [number,number],
+    size?: number,
     padding?: number,
-    color: string
+    color?: string,
+    background?: string
 }
 
 type Fonts = {

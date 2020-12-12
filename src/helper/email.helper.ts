@@ -1,20 +1,13 @@
 import { createTransport } from 'nodemailer';
 import * as SMTPTransport from "nodemailer/lib/smtp-transport";
 import { Order, Customer, Location, Payment } from "@prisma/client";
-import { readFileSync } from 'fs';
 import { join } from "path";
-//import { environment } from '../../environment'
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/helper/prisma.service';
-//import * as StreamTransport from 'nodemailer/lib/stream-transport';
-//import mjml2html from 'mjml';
-//import * as Handlebars from "handlebars";
 import { MJMLAdvanced } from './mjml-advanced';
 import Mail = require('nodemailer/lib/mailer');
-import { hostname } from 'os';
-import { lowSurrogate } from 'pdf-lib';
-import { tcpPort } from 'src/environment';
 import { PDFService } from './pdf.service';
+import { safeJSONParse } from './safe-json';
 
 type ServerSettings = {
     hostname: string,
@@ -118,33 +111,8 @@ export class EMailHelper {
         return {transporter: transporter, settings: serverData};
     }
 
-    private parseContent(html: Buffer, order: Order & {location: Location}, customer: Customer, payment: Payment) : Buffer {
-        let content = html.toString('utf8');
-
-        //let shippingAddressStruct = JSON.parse(order.shippingAddress);
-        let invoiceDataStruct = customer.invoiceData ? JSON.parse(customer.invoiceData) : null;
-
-        //let shippingAddress = `${customer.firstName} ${customer.lastName}<br/>${shippingAddressStruct.street} ${shippingAddressStruct.houseNumber}<br/>${shippingAddressStruct.zip} ${shippingAddressStruct.city}`;
-        let invoiceData = invoiceDataStruct ? `${customer.firstName} ${customer.lastName}<br/>${invoiceDataStruct.street}" "${invoiceDataStruct.houseNumber}<br/>${invoiceDataStruct.zip} ${invoiceDataStruct.city}` : "";
-
-        content = content.replace(/\{ORDERNO\}/g, order.id)
-                        .replace(/\{LOCATION\}/g, order.location.name)
-                        .replace(/\{ANREDE\}/g, 'Sehr geehrte/r')
-                        .replace(/\{TITLE\}/g, customer.title)
-                        .replace(/\{LASTNAME\}/g, customer.lastName)
-                        //.replace(/\{SERVICE\}/g, order.orderType)
-                        //.replace(/\{TIME\}/g,  min")
-                        .replace(/\{PAYMETHOD\}/g, payment.paymentType)
-                        //.replace(/\{D-ADRESS\}/g, shippingAddress)
-                        .replace(/\{B-ADRESS\}/g, invoiceData)
-                        //.replace(/\{MESSAGE\}/g, order.annotations ?? "")
-
-        return new Buffer(content, 'utf8');
-    }
-
     async mailTemplateForOrder(orderId: string) {
         //console.log("//"+tcpPort+"/assets/images/ckhdggtuw000001l3d8v0ca28/mail/logo.png");
-        const path = this.getMailAssetPath(1);
         const order = await this.prisma.order.findOne({
             where: {
                 id: orderId
@@ -172,9 +140,30 @@ export class EMailHelper {
                     select: {
                         paymentType: true
                     }
+                },
+                widget: {
+                    select: {
+                        locationId: true,
+                    }
                 }
             }
         });
+
+        const [locationSettings] = await Promise.all([this.prisma.locationSetting.findOne({
+            where: {
+                locationId_settingType: {
+                    locationId: order.widget.locationId,
+                    settingType: 'SOCIALMEDIA'
+                }
+            },
+            select: {
+                value: true
+            }
+        })]);
+
+        const socialMedia = this.getSocialMedia(safeJSONParse(locationSettings.value));
+
+        const path = this.getMailAssetPath(order.widget.locationId);
 
         let billingAddress : any;
         try {
@@ -207,7 +196,7 @@ export class EMailHelper {
             throw Error("no order with id "+orderId+" found");
 
         let parser = new MJMLAdvanced();
-        let template = parser.compile(mailTemplate(1));
+        let template = parser.compile(mailTemplate(order.widget.locationId));
         return template({
             customer: {
                 prefix: order.customer.prefix === 'MR' ? 'Sehr geehrter Herr' : 'Sehr geehrte Frau',
@@ -223,15 +212,38 @@ export class EMailHelper {
             voucherGroups: voucherGroups,
             totalSum: this.valueFormat.format(totalSum),
             billingAddress: billingAddress,
-            asset: path
+            asset: path,
+            base: this.getMailAssetPath(),
+            socialMedia: socialMedia
         }) as string;
     }
 
-    private getMailAssetPath(locationId: string | number) {
-        let host = hostname();
+    private getMailAssetPath(locationId?: string | number) {
+        /*let host = hostname();
         if(tcpPort !== 80)
             host += ':'+tcpPort;
 
-        return "//"+host+"/assets/mail/"+locationId+"/";
+        return "//"+host+"/assets/mail/"+locationId+"/";*/
+
+        return "https://api.voucher.reservision.com/assets/mail/"+(locationId ?? 'base') +"/";
+    }
+
+    private getSocialMedia(obj: any) {
+        Object.keys(obj).forEach(key => {
+            let url : string;
+            switch(key) {
+                case 'fb':
+                    url = "https://www.facebook.com/";
+                    break;
+                case 'ig':
+                    url = "https://www.instagram.com/";
+                    break;
+                case 'twitter':
+                    url = "https://www.twitter.com/";
+                    break;
+            }
+            obj[key] = url + obj[key];
+        });
+        return obj;
     }
 }

@@ -309,8 +309,8 @@ export class ShopController {
   @Get('mail')
   async mail() {
       //return this.mailService.acceptMail();
-      //return this.mailService.mailTemplateForOrder('ckhul25rl0010a8ujn2jiqlfq');
-      this.mailService.sendConfirmationMail('ckhul25rl0010a8ujn2jiqlfq');
+      return this.mailService.mailTemplateForOrder('ckhxjigm5047844ujou3wwcz0');
+      //this.mailService.sendConfirmationMail('ckhul25rl0010a8ujn2jiqlfq');
       return;
   }/*
 

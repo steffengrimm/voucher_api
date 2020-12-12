@@ -1,0 +1,11 @@
+<mj-group>
+	{{#if socialMedia.fb}}
+	<mj-column width="50px"><mj-image href="{{socialMedia.fb}}" height="32px" width="32px" src="{{asset}}fb.png" padding="0"></mj-image></mj-column>
+	{{/if}}
+	{{#if socialMedia.ig}}
+	<mj-column width="50px"><mj-image href="{{socialMedia.ig}}" height="32px" width="32px" src="{{asset}}ig.png" padding="0"></mj-image></mj-column>
+	{{/if}}
+	{{#if socialMedia.twitter}}
+	<mj-column width="50px"><mj-image href="{{socialMedia.twitter}}" height="32px" width="32px" src="{{asset}}twitter.png" padding="0"></mj-image></mj-column>
+	{{/if}}
+</mj-group>
